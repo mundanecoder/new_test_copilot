@@ -4,18 +4,11 @@ import React from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Element } from "hast";
+import Image from "next/image";
 
 interface CustomMarkdownProps {
   content: string;
   className?: string;
-}
-
-interface ListItemComponentProps {
-  children?: React.ReactNode;
-  className?: string;
-  ordered?: boolean;
-  index?: number;
-  checked?: boolean | null;
 }
 
 // Define more specific prop types for our components
@@ -66,7 +59,8 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
       <td className="px-4 py-2 border-b border-black">{children}</td>
     ),
     p: ({ children, node, ...props }) => {
-      const parentType = (node as any)?.parent?.type;
+      const parentType = (node as unknown as { parent?: { type?: string } })
+        ?.parent?.type;
       if (parentType === "listItem") {
         return (
           <span className="inline" {...props}>
@@ -120,7 +114,7 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
         {children}
       </a>
     ),
-    ul: ({ children, ordered }: ListProps) => (
+    ul: ({ children }: ListProps) => (
       <ul className="list-disc space-y-2 ml-4 font-semibold text-black">
         {children}
       </ul>
@@ -148,11 +142,13 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
       return <li {...props}>{children}</li>;
     },
     img: ({ src, alt }) => (
-      <img
-        src={src}
-        alt={alt}
+      <Image
+        src={src || ""}
+        alt={alt || ""}
         className="max-w-full h-auto rounded-lg my-4 border border-black"
         loading="lazy"
+        width={500}
+        height={300}
       />
     ),
     hr: () => <hr className="my-8 border-black" />,

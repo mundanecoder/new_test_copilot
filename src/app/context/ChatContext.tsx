@@ -61,6 +61,21 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessions, setSessions] = useState<Session[]>([]);
 
+  const fetchUserSessions = useCallback(async () => {
+    try {
+      const sessionsData = await fetchSessions();
+      setSessions(sessionsData);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      fetchUserSessions();
+    }
+  }, [fetchUserSessions]);
+
   const handleSendMessage = useCallback(
     async (content: string) => {
       if (!content.trim() || isLoading) return;
@@ -131,38 +146,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false);
       }
     },
-    [isLoading, sessionId, sendChatMessage]
+    [isLoading, sessionId]
   );
-
-  // const fetchUserSessions = useCallback(async () => {
-  //   try {
-  //     const sessionsData = await fetchSessions();
-  //     setSessions(sessionsData);
-  //   } catch (error) {
-  //     console.error("Error fetching sessions:", error);
-  //   }
-  // }, []);
 
   const handleStartNewChat = () => {
     // Implementation for starting a new chat
+    fetchUserSessions();
     setMessages([]);
     setSessionId(null);
   };
-
-  const fetchUserSessions = useCallback(async () => {
-    try {
-      const sessionsData = await fetchSessions();
-      setSessions(sessionsData);
-    } catch (error) {
-      console.error("Error fetching sessions:", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated()) {
-      fetchUserSessions();
-    }
-  }, [fetchUserSessions]);
 
   const loadSessionMessages = useCallback(async (id: number) => {
     try {
