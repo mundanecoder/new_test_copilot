@@ -202,6 +202,11 @@ export const sendChatMessage = async (
     const formatMarkdown = (text: string): string => {
       return text
         .replace(/(\#{1,6}\s[^\n]+)(\n\#{1,6}\s)/g, "$1\n\n$2") // Ensure two newlines before headers
+        .replace(/(\#{1,6}\s[^\n]+)(\n\#{1,6}\s)/g, "$1\n\n$2") // Ensure two newlines before headers
+        .replace(/([^\n])(\#{3}\s)/g, "$1\n\n\n$3") // Add two new lines before level 3 headers (###)
+        .replace(/([^\n])(\#{4}\s)/g, "$1\n\n\n$4") // Add two new lines before level 4 headers (####)
+        .replace(/([^\n])(\#{2}\s)/g, "$1\n\n\n$2") // Add two new lines before level 2 headers (##)
+
         .replace(/([^\n])(\#{1,6}\s)/g, "$1\n\n$2") // Ensure headers start after a blank line
         .replace(/(\n{2,})/g, "\n\n") // Normalize excessive newlines
         .trim();
