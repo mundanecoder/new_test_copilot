@@ -18,86 +18,90 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
 }) => {
   const markdownComponents: Partial<Components> = {
     h1: ({ children }) => (
-      <h1 className="text-3xl font-bold mb-4 text-black">{children}</h1>
+      <h1 className="text-4xl font-bold mt-2 mb-4 text-black border-b pb-2 border-gray-300">
+        {children}
+      </h1>
     ),
+
     h2: ({ children }) => (
-      <h2 className="text-2xl font-semibold mb-3 text-black">{children}</h2>
+      <h2 className="text-3xl font-semibold my-4 text-black border-b pb-2 border-gray-300">
+        {children}
+      </h2>
     ),
+
     h3: ({ children }) => (
-      <h3 className="text-xl font-medium mb-2 text-black">{children}</h3>
+      <h3 className="text-2xl font-medium mb-8 text-black">{children}</h3>
     ),
+
     table: ({ children }) => (
-      <div className="overflow-x-auto my-4">
-        <table className="w-full border-collapse bg-white rounded-lg shadow-sm border border-black">
+      <div className="overflow-x-auto my-6">
+        <table className="w-full border-collapse bg-white mt-4 mb-2 rounded-lg shadow-md border border-gray-300">
           {children}
         </table>
       </div>
     ),
-    thead: ({ children }) => <thead className="bg-gray-200">{children}</thead>,
+
+    thead: ({ children }) => (
+      <thead className="bg-gray-200 mb-3 font-semibold">{children}</thead>
+    ),
+
     tbody: ({ children }) => <tbody>{children}</tbody>,
-    tr: ({ children }) => <tr>{children}</tr>,
+
+    tr: ({ children }) => (
+      <tr className="border-b border-gray-300">{children}</tr>
+    ),
+
     th: ({ children }) => (
-      <th className="px-4 py-2 bg-gray-200 font-semibold text-left border-b border-black">
+      <th className="px-6 py-3 text-left border-b mb-2 border-gray-400 bg-gray-200">
         {children}
       </th>
     ),
+
     td: ({ children }) => (
-      <td className="px-4 py-2 border-b border-black">{children}</td>
+      <td className="px-6 py-3 border-b border-gray-300">{children}</td>
     ),
-    p: ({ children, node, ...props }) => {
-      // Use optional chaining to safely access the parent type
-      const parentType = (node as { parent?: { type: string } })?.parent?.type;
-      if (parentType === "listItem") {
-        return (
-          <span className="inline" {...props}>
-            {children}
-          </span>
-        );
-      }
-      return (
-        <p className="mb-4 text-lg text-black" {...props}>
-          {children}
-        </p>
-      );
-    },
+
+    p: ({ children }) => (
+      <p className="mb-5 text-lg  text-gray-900 leading-relaxed">{children}</p>
+    ),
+
     blockquote: ({ children }) => (
-      <blockquote className="pl-4 border-l-4 border-black italic my-4 text-black">
+      <blockquote className="pl-6 border-l-4 mb-2 border-gray-500 italic text-gray-800 bg-gray-100 py-2 px-4 rounded-md my-6">
         {children}
       </blockquote>
     ),
-    code: (props) => {
-      const { inline, className, children, ...rest } = props as {
-        inline?: boolean;
-        className?: string;
-        children: React.ReactNode;
-      };
+
+    code: ({ className, children, ...props }) => {
       const match = /language-(\w+)/.exec(className || "");
-      const language = match ? match[1] : "";
-      if (inline) {
-        return (
-          <code
-            className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono text-black"
-            {...rest}
-          >
-            {children}
-          </code>
-        );
+      // TypeScript doesn't recognize 'inline' property, so we need to type it properly
+      const isInline = "inline" in props;
+      // Create a new props object without the inline property
+      const newProps = { ...props };
+      if ("inline" in newProps) {
+        delete (newProps as { inline?: boolean }).inline;
       }
-      return (
-        <pre className="overflow-x-auto my-4">
+      return isInline ? (
+        <code
+          className="px-2 py-1 bg-gray-100 text-black rounded font-mono text-sm"
+          {...newProps}
+        >
+          {children}
+        </code>
+      ) : (
+        <pre className="overflow-x-auto my-6 rounded-lg">
           <SyntaxHighlighter
-            language={language}
+            language={match ? match[1] : ""}
             style={oneDark}
             PreTag="div"
             customStyle={{ padding: "1rem", borderRadius: "0.5rem" }}
-            {...rest}
+            {...props}
           >
-            {String(children).replace(/\n$/, "")}
+            {String(children).trim()}
           </SyntaxHighlighter>
         </pre>
       );
     },
-    br: () => <br className="my-2" />,
+
     a: ({ href, children }) => (
       <a
         href={href}
@@ -108,53 +112,45 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
         {children}
       </a>
     ),
+
     ul: ({ children }) => (
-      <ul className="list-disc space-y-2 ml-4 font-semibold text-black">
-        {children}
-      </ul>
+      <ul className="list-disc ml-6 space-y-2 text-black">{children}</ul>
     ),
+
     ol: ({ children }) => (
-      <ol className="list-decimal list-outside pl-8 space-y-2 text-black">
-        {children}
-      </ol>
+      <ol className="list-decimal ml-6 space-y-2 text-black">{children}</ol>
     ),
-    li: ({ children, ...props }) => {
-      // Convert children to an array safely
-      const childrenArray = React.Children.toArray(children);
-      if (
-        childrenArray.length > 0 &&
-        typeof childrenArray[0] === "string" &&
-        childrenArray[0].match(/^\d+\./)
-      ) {
-        const content = (childrenArray[0] as string).replace(/^\d+\.\s*/, "");
-        return <li {...props}>{content}</li>;
-      }
-      return <li {...props}>{children}</li>;
-    },
+
+    li: ({ children }) => (
+      <li className="text-gray-900 leading-relaxed">{children}</li>
+    ),
+
     img: ({ src, alt }) => (
       <Image
         src={src || ""}
         alt={alt || ""}
-        className="max-w-full h-auto rounded-lg my-4 border border-black"
+        className="max-w-full h-auto rounded-lg my-6 border border-gray-400 shadow-md"
         loading="lazy"
-        width={500}
-        height={300}
+        width={600}
+        height={400}
       />
     ),
-    hr: () => <hr className="my-8 border-black" />,
+
+    hr: () => <hr className="my-8 border-gray-400" />,
+
     strong: ({ children }) => (
-      <strong className="font-semibold inline text-black">{children}</strong>
+      <strong className="font-semibold text-black">{children}</strong>
     ),
-    em: ({ children }) => (
-      <em className="italic inline text-black">{children}</em>
-    ),
+
+    em: ({ children }) => <em className="italic text-black">{children}</em>,
+
     del: ({ children }) => (
       <del className="line-through text-gray-500">{children}</del>
     ),
   };
 
   return (
-    <div className={className}>
+    <div className={`prose prose-lg ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={markdownComponents}

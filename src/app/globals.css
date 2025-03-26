@@ -111,107 +111,275 @@ body {
   animation-delay: 0.4s;
 }
 
+/* Enhanced Markdown Styling */
 .markdown-content {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
+  font-family: "Inter", Arial, sans-serif;
+  line-height: 1.8;
   word-wrap: break-word;
+  color: #000000;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  font-size: 1.05rem;
 }
 
 /* Paragraph and line breaks */
 .markdown-content p {
-  margin-top: 16px; /* Space above paragraphs */
-  margin-bottom: 16px; /* Space below paragraphs */
-  white-space: pre-wrap; /* Preserve white space and newlines */
-  color: #000000; /* Ensure paragraph text color is black */
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+  white-space: pre-wrap;
+  color: #000000;
+  letter-spacing: 0.01em;
+}
+
+/* Headings with elegant styling */
+.markdown-content h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 1.75em;
+  margin-bottom: 0.75em;
+  color: #000000;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.3em;
+  letter-spacing: -0.02em;
+}
+
+.markdown-content h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  color: #000000;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.3em;
+  letter-spacing: -0.01em;
+}
+
+.markdown-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.25em;
+  margin-bottom: 0.75em;
+  color: #000000;
+  letter-spacing: -0.01em;
+}
+
+.markdown-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+  color: #000000;
 }
 
 /* Case law titles and separators */
 .markdown-content hr {
   border: none;
-  border-top: 1px solid #ddd; /* Dashed line for horizontal rule */
-  margin: 20px 0; /* Adds spacing around the horizontal line */
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d1d5db, transparent);
+  margin: 2em 0;
 }
 
-/* Bold titles for case law entries */
+/* Bold text styling */
 .markdown-content strong {
-  font-weight: bold;
-  color: #000000; /* Ensure strong text color is black */
+  font-weight: 700;
+  color: #000000;
 }
 
-/* Styling for custom download links */
+/* Italic text styling */
+.markdown-content em {
+  font-style: italic;
+  color: #000000;
+}
+
+/* Links with smooth hover effect */
 .markdown-content a {
-  color: #007bff; /* Link color */
-  text-decoration: none; /* Remove underline */
+  color: #3b82f6;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .markdown-content a:hover {
-  text-decoration: underline; /* Underline on hover */
+  color: #2563eb;
+  border-bottom: 1px solid #2563eb;
 }
 
-/* Adjust list spacing */
+/* Lists with improved spacing and styling */
 .markdown-content ul,
 .markdown-content ol {
-  padding-left: 20px; /* Adds padding to lists */
-  margin-top: 16px; /* Space above lists */
-  margin-bottom: 16px; /* Space below lists */
+  padding-left: 1.75em;
+  margin: 1.25em 0;
 }
 
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3 {
-  margin-top: 24px;
-  margin-bottom: 16px;
-  color: #000000; /* Ensure header text color is black */
+.markdown-content ul {
+  list-style-type: disc;
 }
 
-/* Horizontal scrolling for wide content like tables */
-.markdown-content pre,
-.markdown-content code,
-.markdown-content table {
-  overflow-x: auto; /* Allow horizontal scrolling for wide content */
-  white-space: nowrap; /* Prevent breaking content into multiple lines */
+.markdown-content ol {
+  list-style-type: decimal;
 }
 
-.markdown-content table,
-.markdown-content pre,
+.markdown-content li {
+  margin-bottom: 0.5em;
+  position: relative;
+}
+
+.markdown-content li > * {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+/* Nested lists */
+.markdown-content ul ul,
+.markdown-content ol ol,
+.markdown-content ul ol,
+.markdown-content ol ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Blockquotes with elegant styling */
 .markdown-content blockquote {
-  margin: 16px 0;
+  border-left: 4px solid #3b82f6;
+  padding: 0.75em 1.25em;
+  margin: 1.5em 0;
+  background-color: rgba(59, 130, 246, 0.05);
+  border-radius: 0 0.25rem 0.25rem 0;
+  font-style: italic;
+  color: #4b5563;
 }
 
-/* Table styling */
+.markdown-content blockquote p {
+  margin: 0.5em 0;
+}
+
+/* Code blocks and inline code */
+.markdown-content pre {
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 1em;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+}
+
+.markdown-content code {
+  font-family: "Fira Code", monospace;
+  font-size: 0.9em;
+  background-color: #f3f4f6;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  color: #000000;
+  border: 1px solid #e5e7eb;
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: #000000;
+}
+
+/* Table styling with responsive design */
+.markdown-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5em 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-content th,
+.markdown-content td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #000000;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.markdown-content tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.markdown-content tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Custom table classes for more control */
 .custom-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  table-layout: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5em 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .custom-th,
 .custom-td {
-  padding: 12px;
-  border: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
   text-align: left;
-  vertical-align: top;
 }
 
 .custom-th {
-  background-color: #413b3b;
-  font-weight: bold;
-  color: #000000; /* Ensure table header text color is black */
+  background-color: #f3f4f6;
+  font-weight: 600;
+  color: #000000;
+  border-bottom: 2px solid #d1d5db;
 }
 
 .custom-td {
   word-wrap: break-word;
-  color: #000000; /* Ensure table cell text color is black */
+  color: #000000;
 }
 
 .custom-table tr:nth-child(even) {
-  background-color: #424141;
+  background-color: #f9fafb;
+}
+
+.custom-table tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Images with elegant styling */
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive design for mobile */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
+  .markdown-content {
+    font-size: 1rem;
+  }
+
+  .markdown-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .markdown-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .markdown-content h3 {
+    font-size: 1.25rem;
+  }
+
   .markdown-content table,
   .markdown-content thead,
   .markdown-content tbody,
@@ -225,69 +393,83 @@ body {
   .markdown-content td {
     width: 100%;
     box-sizing: border-box;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .markdown-content th {
+    text-align: center;
   }
 
   .markdown-content tr {
-    margin-bottom: 10px;
+    margin-bottom: 1em;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .markdown-content td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 0.5em;
   }
 }
 
-.markdown-content ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.markdown-content li {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 8px;
-}
-
-/* For nested lists */
-.markdown-content ul,
-.markdown-content ol {
-  padding-left: 40px; /* Indent nested lists */
-}
-
-.markdown-content ul {
-  list-style-type: disc; /* Use bullet points for unordered lists */
-  margin-top: 16px; /* Space above the list */
-  margin-bottom: 16px; /* Space below the list */
-}
-
-.markdown-content li > * {
-  display: inline;
-  margin: 0;
-  padding: 0;
-}
-
-@keyframes progress {
-  0% {
-    left: -33%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-.animate-progress {
-  animation: progress 1.5s ease-in-out infinite;
-}
-
+/* Selection styling */
 ::selection {
-  background-color: rgba(
-    255,
-    165,
-    0,
-    0.2
-  ); /* Light orange with some transparency */
-  color: inherit; /* Keeps the original text color */
+  background-color: rgba(59, 130, 246, 0.2);
+  color: inherit;
 }
 
 .markdown-content ::selection {
-  background-color: rgba(255, 165, 0, 0.5);
+  background-color: rgba(59, 130, 246, 0.3);
   color: inherit;
+}
+
+/* Animations for content loading */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.markdown-content > * {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Checkbox styling */
+.markdown-content input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.25em;
+  height: 1.25em;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25em;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+}
+
+.markdown-content input[type="checkbox"]:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.markdown-content input[type="checkbox"]:checked::after {
+  content: "✓";
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75em;
 }
 
 .SelectContent {
