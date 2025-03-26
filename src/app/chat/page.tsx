@@ -192,6 +192,7 @@ export default function ChatPage() {
 
         <div className="flex-1 overflow-y-auto p-4">
           {/* Display all sessions */}
+
           {sessions && sessions.length > 0 ? (
             <div className="space-y-2">
               {sessions.map((session) => (

@@ -93,3 +93,16 @@ export const logout = (): void => {
     localStorage.removeItem("token_type");
   }
 };
+
+export const handleAuthError = (error: string): void => {
+  // Check if the error is a 401 Unauthorized error
+  if (error === "401") {
+    // Clear any existing auth tokens
+    logout();
+
+    // Redirect to login page
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
+    }
+  }
+};
