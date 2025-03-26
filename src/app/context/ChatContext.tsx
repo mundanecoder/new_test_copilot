@@ -8,8 +8,12 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { API_URL, getAuthToken, isAuthenticated } from "../api/auth";
-import { fetchSessions, sendChatMessage } from "../api/chat";
+import { isAuthenticated } from "../api/auth";
+import {
+  fetchSessionMessages,
+  fetchSessions,
+  sendChatMessage,
+} from "../api/chat";
 
 interface ChatMessage {
   id: number;
@@ -146,7 +150,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false);
       }
     },
-    [isLoading, sessionId]
+    [isLoading, sessionId, fetchUserSessions]
   );
 
   const handleStartNewChat = () => {
@@ -210,33 +214,4 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </ChatContext.Provider>
   );
-};
-
-// Function to fetch messages for a specific session
-export const fetchSessionMessages = async (
-  sessionId: number
-): Promise<SessionMessage[]> => {
-  const token = getAuthToken();
-  if (!token) {
-    throw new Error("Not authenticated");
-  }
-
-  try {
-    const response = await fetch(`${API_URL}/session/${sessionId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch messages for session ${sessionId}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching messages for session ${sessionId}:`, error);
-    throw error;
-  }
 };

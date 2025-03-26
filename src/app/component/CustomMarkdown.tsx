@@ -3,27 +3,13 @@
 import React from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Element } from "hast";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Image from "next/image";
 
 interface CustomMarkdownProps {
   content: string;
   className?: string;
-}
-
-// Define more specific prop types for our components
-interface ComponentBaseProps {
-  children?: React.ReactNode;
-  className?: string;
-}
-
-interface CodeProps extends ComponentBaseProps {
-  inline?: boolean;
-}
-
-interface ListProps extends ComponentBaseProps {
-  ordered?: boolean;
-  node?: Element;
 }
 
 const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
@@ -59,8 +45,8 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
       <td className="px-4 py-2 border-b border-black">{children}</td>
     ),
     p: ({ children, node, ...props }) => {
-      const parentType = (node as unknown as { parent?: { type?: string } })
-        ?.parent?.type;
+      // Use optional chaining to safely access the parent type
+      const parentType = (node as { parent?: { type: string } })?.parent?.type;
       if (parentType === "listItem") {
         return (
           <span className="inline" {...props}>
@@ -79,27 +65,35 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
         {children}
       </blockquote>
     ),
-    code: ({ inline, className, children }: CodeProps) => {
+    code: (props) => {
+      const { inline, className, children, ...rest } = props as {
+        inline?: boolean;
+        className?: string;
+        children: React.ReactNode;
+      };
       const match = /language-(\w+)/.exec(className || "");
       const language = match ? match[1] : "";
-
       if (inline) {
         return (
-          <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono text-black">
+          <code
+            className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono text-black"
+            {...rest}
+          >
             {children}
           </code>
         );
       }
-
       return (
         <pre className="overflow-x-auto my-4">
-          <code
-            className={`block bg-gray-100 p-4 rounded-lg text-sm font-mono text-black ${
-              language ? `language-${language}` : ""
-            }`}
+          <SyntaxHighlighter
+            language={language}
+            style={oneDark}
+            PreTag="div"
+            customStyle={{ padding: "1rem", borderRadius: "0.5rem" }}
+            {...rest}
           >
-            {children}
-          </code>
+            {String(children).replace(/\n$/, "")}
+          </SyntaxHighlighter>
         </pre>
       );
     },
@@ -114,31 +108,27 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
         {children}
       </a>
     ),
-    ul: ({ children }: ListProps) => (
+    ul: ({ children }) => (
       <ul className="list-disc space-y-2 ml-4 font-semibold text-black">
         {children}
       </ul>
     ),
-    ol: ({ children }: ListProps) => (
+    ol: ({ children }) => (
       <ol className="list-decimal list-outside pl-8 space-y-2 text-black">
         {children}
       </ol>
     ),
     li: ({ children, ...props }) => {
-      // Check if the content starts with a number followed by a period
-      const hasNumber = React.Children.toArray(children)[0]
-        ?.toString()
-        .match(/^\d+\./);
-
-      // If it's a manually numbered item, remove the number
-      if (hasNumber) {
-        const content = React.Children.toArray(children)[0]
-          ?.toString()
-          .replace(/^\d+\.\s*/, "");
+      // Convert children to an array safely
+      const childrenArray = React.Children.toArray(children);
+      if (
+        childrenArray.length > 0 &&
+        typeof childrenArray[0] === "string" &&
+        childrenArray[0].match(/^\d+\./)
+      ) {
+        const content = (childrenArray[0] as string).replace(/^\d+\.\s*/, "");
         return <li {...props}>{content}</li>;
       }
-
-      // For regular list items, just render them normally
       return <li {...props}>{children}</li>;
     },
     img: ({ src, alt }) => (
@@ -168,7 +158,6 @@ const CustomMarkdown: React.FC<CustomMarkdownProps> = ({
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={markdownComponents}
-        rehypePlugins={[]}
       >
         {content}
       </ReactMarkdown>
