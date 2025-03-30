@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
@@ -8,13 +8,27 @@ import { useAuth } from "../context/AuthContext";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [serverUrl, setServerUrl] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
   const { login, loading } = useAuth();
 
+  // Load saved server URL from localStorage on component mount
+  useEffect(() => {
+    const savedServerUrl = localStorage.getItem("serverUrl");
+    if (savedServerUrl) {
+      setServerUrl(savedServerUrl);
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Save server URL to localStorage
+    if (serverUrl) {
+      localStorage.setItem("serverUrl", serverUrl);
+    }
 
     try {
       await login(username, password);
@@ -70,6 +84,23 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="serverUrl"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Server URL (Optional)
+            </label>
+            <input
+              id="serverUrl"
+              type="url"
+              value={serverUrl}
+              onChange={(e) => setServerUrl(e.target.value)}
+              placeholder="https://example.com"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>

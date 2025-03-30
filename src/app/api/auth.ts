@@ -20,7 +20,10 @@ interface AuthResponse {
 
 // export const API_URL = " https://cheaply-saving-civet.ngrok-free.app";
 // export const API_URL = "http://localhost:8000";
-export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const API_URL =
+  typeof window !== "undefined"
+    ? localStorage.getItem("serverUrl") || process.env.NEXT_PUBLIC_API_URL
+    : process.env.NEXT_PUBLIC_API_URL;
 
 export const createUser = async (userData: User): Promise<unknown> => {
   try {
